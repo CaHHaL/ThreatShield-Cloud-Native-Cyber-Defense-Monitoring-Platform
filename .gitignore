@@ -70,7 +70,7 @@ desktop.ini
 
 # Environment
 .env
-.env.*
+
 
 # Python
 __pycache__/
