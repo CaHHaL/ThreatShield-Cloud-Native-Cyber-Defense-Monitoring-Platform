@@ -1,7 +1,8 @@
 import axios from 'axios'
+import { EC2_IP } from '../config'
 
-const API_URL = import.meta.env.VITE_API_URL || ''
-const WS_URL  = import.meta.env.VITE_WS_URL  || (window.location.protocol === 'https:' ? `wss://${window.location.host}` : `ws://${window.location.host}`)
+const API_URL = import.meta.env.VITE_API_URL || (EC2_IP !== 'YOUR_EC2_IP' ? `http://${EC2_IP}:8000` : '')
+const WS_URL  = import.meta.env.VITE_WS_URL  || (EC2_IP !== 'YOUR_EC2_IP' ? `ws://${EC2_IP}:8000` : (window.location.protocol === 'https:' ? `wss://${window.location.host}` : `ws://${window.location.host}`))
 
 const api = axios.create({
   baseURL: API_URL,

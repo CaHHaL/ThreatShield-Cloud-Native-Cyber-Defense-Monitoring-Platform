@@ -14,6 +14,23 @@ data "aws_ami" "ubuntu" {
   }
 }
 
+# Key Pair Generation
+resource "tls_private_key" "ssh_key" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "aws_key_pair" "generated_key" {
+  key_name   = "${var.key_name}-new"
+  public_key = tls_private_key.ssh_key.public_key_openssh
+}
+
+resource "local_file" "private_key" {
+  content         = tls_private_key.ssh_key.private_key_pem
+  filename        = "${path.module}/${var.key_name}-new.pem"
+  file_permission = "0400"
+}
+
 # Security Group
 resource "aws_security_group" "threatshield_sg" {
   name        = "threatshield_sg"
@@ -90,7 +107,7 @@ resource "aws_security_group" "threatshield_sg" {
 resource "aws_instance" "threatshield_server" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = var.instance_type
-  key_name      = var.key_name
+  key_name      = aws_key_pair.generated_key.key_name
 
   vpc_security_group_ids = [aws_security_group.threatshield_sg.id]
 

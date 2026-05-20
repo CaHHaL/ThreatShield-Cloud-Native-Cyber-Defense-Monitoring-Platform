@@ -1,7 +1,10 @@
 import styles from './NavBar.module.css'
+import { EC2_IP } from '../config'
 
 export default function NavBar({ connected, lastUpdated }) {
   const now = lastUpdated ? new Date(lastUpdated).toLocaleTimeString() : new Date().toLocaleTimeString()
+
+  let baseIp = EC2_IP !== 'YOUR_EC2_IP' ? EC2_IP : 'localhost'
 
   return (
     <nav className={styles.nav}>
@@ -39,7 +42,7 @@ export default function NavBar({ connected, lastUpdated }) {
         </div>
         <div className={styles.sep} />
         <a
-          href="http://localhost:9090"
+          href={`http://${baseIp}:9090`}
           target="_blank"
           rel="noreferrer"
           className={styles.iconLink}
@@ -50,7 +53,7 @@ export default function NavBar({ connected, lastUpdated }) {
           </svg>
         </a>
         <a
-          href="http://localhost:3001"
+          href={`http://${baseIp}:3001`}
           target="_blank"
           rel="noreferrer"
           className={styles.iconLink}
@@ -61,7 +64,7 @@ export default function NavBar({ connected, lastUpdated }) {
           </svg>
         </a>
         <a
-          href="http://localhost:8000/docs"
+          href={`http://${baseIp}:8000/docs`}
           target="_blank"
           rel="noreferrer"
           className={styles.iconLink}
